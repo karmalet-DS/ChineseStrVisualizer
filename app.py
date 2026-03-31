@@ -33,17 +33,32 @@ def _inject_js(html: str, orgchart_js: str) -> str:
         r'<script\s+src=["\'](?:\./)?(?:OrgChart|orgchart)\.js["\']\s*></script>',
         re.IGNORECASE,
     )
+    layout_style = """
+<style>
+#tree { position: relative; }
+#tree [data-id="search"],
+#tree [id="search"] {
+    position: absolute !important;
+    top: 12px !important;
+    right: 12px !important;
+    left: auto !important;
+    margin: 0 !important;
+    z-index: 30;
+}
+</style>
+"""
     inline_script = f"<script>\n{orgchart_js}\n</script>"
+    injection = layout_style + "\n" + inline_script
 
     if script_tag_pattern.search(html):
-        return script_tag_pattern.sub(lambda _match: inline_script, html, count=1)
+        return script_tag_pattern.sub(lambda _match: injection, html, count=1)
 
     # If the include does not exist, inject before </head>.
     head_close_pattern = re.compile(r"</head>", re.IGNORECASE)
     if head_close_pattern.search(html):
-        return head_close_pattern.sub(lambda _match: inline_script + "\n</head>", html, count=1)
+        return head_close_pattern.sub(lambda _match: injection + "\n</head>", html, count=1)
 
-    return inline_script + "\n" + html
+    return injection + "\n" + html
 
 
 def _load_demo_html(demo_path: Path, orgchart_js: str) -> str:
