@@ -36,13 +36,14 @@ def _inject_js(html: str, orgchart_js: str) -> str:
     layout_style = """
 <style>
 #tree { position: relative; }
-#tree [data-id="search"],
-#tree [id="search"] {
+div[data-id="search"],
+div[id="search"] {
     position: absolute !important;
     top: 12px !important;
     right: 12px !important;
     left: auto !important;
     margin: 0 !important;
+    transform: none !important;
     z-index: 30;
 }
 </style>
