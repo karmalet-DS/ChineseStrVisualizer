@@ -133,7 +133,7 @@ def main() -> None:
     st.set_page_config(page_title="ChineseStrVisualizer", layout="wide")
     st.title("중국어 문장 구조 시각화 App")
     st.markdown(
-        "중국어 문법 교육에 반응형 웹페이지(html5) 적용 <br> - 추상적인 문장 구조 시각화 <br> - 자극-반응을 통한 학습효과 극대화",
+        "중국어 문법 교육에 반응형 웹페이지(html5) 적용: 추상적인 문장 구조 시각화 / 자극-반응을 통한 학습효과 극대화",
         unsafe_allow_html=True,
     )
 
