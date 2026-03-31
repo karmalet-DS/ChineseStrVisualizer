@@ -39,12 +39,22 @@ def _inject_js(html: str, orgchart_js: str) -> str:
 div[data-id="search"],
 div[id="search"] {
     position: absolute !important;
-    top: 12px !important;
+    top: 6px !important;
     right: 12px !important;
     left: auto !important;
     margin: 0 !important;
     transform: none !important;
     z-index: 30;
+}
+div[data-id="search-icon"],
+div[id="search-icon"] {
+    position: absolute !important;
+    top: 6px !important;
+    right: 320px !important;
+    left: auto !important;
+    margin: 0 !important;
+    transform: none !important;
+    z-index: 31;
 }
 </style>
 """
