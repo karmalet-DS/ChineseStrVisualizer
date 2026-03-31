@@ -59,7 +59,59 @@ div[id="search-icon"] {
 </style>
 """
     inline_script = f"<script>\n{orgchart_js}\n</script>"
-    injection = layout_style + "\n" + inline_script
+    position_fix_script = """
+<script>
+(function () {
+    function pinSearchControls() {
+        var search = document.querySelector('div[data-id="search"], div[id="search"]');
+        var icon = document.querySelector('div[data-id="search-icon"], div[id="search-icon"]');
+        if (!search && !icon) return;
+
+        var tree = document.getElementById('tree') || document.body;
+        var wrapper = icon ? icon.parentElement : (search ? search.parentElement : null);
+
+        if (wrapper && tree.contains(wrapper)) {
+            wrapper.style.position = 'absolute';
+            wrapper.style.top = '6px';
+            wrapper.style.right = '12px';
+            wrapper.style.left = 'auto';
+            wrapper.style.margin = '0';
+            wrapper.style.zIndex = '40';
+            wrapper.style.width = 'auto';
+            wrapper.style.height = 'auto';
+        }
+
+        if (search) {
+            search.style.position = 'absolute';
+            search.style.top = '0';
+            search.style.right = '0';
+            search.style.left = 'auto';
+            search.style.margin = '0';
+            search.style.transform = 'none';
+        }
+
+        if (icon) {
+            icon.style.position = 'absolute';
+            icon.style.top = '0';
+            icon.style.right = '308px';
+            icon.style.left = 'auto';
+            icon.style.margin = '0';
+            icon.style.transform = 'none';
+        }
+    }
+
+    var observer = new MutationObserver(pinSearchControls);
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+
+    window.addEventListener('load', function () {
+        setTimeout(pinSearchControls, 10);
+        setTimeout(pinSearchControls, 150);
+        setTimeout(pinSearchControls, 500);
+    });
+})();
+</script>
+"""
+    injection = layout_style + "\n" + inline_script + "\n" + position_fix_script
 
     if script_tag_pattern.search(html):
         return script_tag_pattern.sub(lambda _match: injection, html, count=1)
