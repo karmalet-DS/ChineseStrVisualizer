@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+html, body {
+            margin: 0px;
+            padding: 0px;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            text-align: center;
+            font-family: Helvetica;
+        }
+
+        #tree {
+            width: 100%;
+            height: 100%;
+        }
+
+        .highlight rect{
+            fill: #F57C00 !important;
+        }
+</style>
+<script src="https://balkangraph.com/js/latest/OrgChart.js"></script>
+
+</head>
+
+<body>
+<div style="width:100%; height:700px;" id="tree"/>
+<script>
+
+		OrgChart.templates.sentence = Object.assign({}, OrgChart.templates.ana);
+        OrgChart.templates.sentence.size = [520, 120];
+        OrgChart.templates.sentence.field_0 = '<text class="field_0"  style="font-size: 20px;" fill="#ffffff" x="260" y="90" text-anchor="middle">{val}</text>';
+        OrgChart.templates.sentence.field_1 = '<text class="field_1"  style="font-size: 30px;" fill="#ffffff" x="500" y="30" text-anchor="end">{val}</text>';
+        OrgChart.templates.sentence.node = '<rect x="0" y="0" height="120" width="520" fill="#039BE5" stroke-width="1" stroke="#aeaeae" rx="5" ry="5"></rect>';
+        OrgChart.templates.ana.field_1 = '<text width="145" text-overflow="multiline" style="font-size: 30px;" fill="#ffffff" x="200" y="30" text-anchor="end">{val}</text>';
+
+		var chart = new OrgChart(document.getElementById("tree"), {
+                nodeBinding: {
+                    field_0: "type",
+                    field_1: "text"                    
+                },
+                orientation: BALKANGraph.orientation.top_left,
+                tags: {
+                    "sentence": {
+                        template: "sentence"
+                    },
+                    "hide": {
+                        state: OrgChart.COLLAPSE
+                    }
+                },
+                nodes: [
+{ id: 0, text: "﻿修 自行车 的 老王", type: "SENTENCE", tags: ["sentence"] },
+{ id: 1, pid: 0, text: "﻿修 自行车 的", type: "관형어", tags: ["hide"] },
+{ id: 2, pid: 1, text: "﻿修", type: "술어동사", tags: ["hide"] },
+{ id: 3, pid: 1, text: "自行车", type: "목적어", tags: ["hide"] },
+{ id: 4, pid: 0, text: "老王", type: "(관형어의)중심어", tags: ["hide"] },
+                ]
+            });
+
+            var nodeEelements = chart.getNodeElements();
+            for (var i = 0; i < nodeEelements.length; i++) {
+                nodeEelements[i].addEventListener("mouseover", function () {
+                    this.classList.add("highlight");
+                    var nodeId = this.getAttribute("node-id");
+                    var parent = chart.nodes[nodeId].parent;
+                    if (parent != null) {
+                        chart.getNodeElement(parent.id).classList.add("highlight");
+                    }
+                });
+
+                nodeEelements[i].addEventListener("mouseleave", function () {
+                    this.classList.remove("highlight");
+                    var nodeId = this.getAttribute("node-id");
+                    var parent = chart.nodes[nodeId].parent;
+                    if (parent != null) {
+                        chart.getNodeElement(parent.id).classList.remove("highlight");
+                    }
+                });
+            }
+    </script>
+
+</body>
+</html>
