@@ -53,16 +53,37 @@ def _load_demo_html(demo_path: Path, orgchart_js: str) -> str:
 
 def main() -> None:
     st.set_page_config(page_title="ChineseStrVisualizer", layout="wide")
-    st.title("ChineseStrVisualizer on Streamlit")
+    st.title("중국어 문장 구조 시각화 App")
     st.caption("Render existing OrgChart HTML demos directly in Streamlit.")
+
+    st.markdown(
+        """
+        <style>
+        [data-testid="stSidebar"] .csv-footer {
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            font-size: 0.8rem;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
     if not DEMO_FILES:
         st.error("No demo HTML files found in this workspace.")
         return
 
-    selected_name = st.sidebar.selectbox("Select demo", [p.name for p in DEMO_FILES], index=0)
-    frame_height = st.sidebar.slider("Frame height", min_value=400, max_value=1200, value=760, step=20)
+    selected_name = st.sidebar.selectbox("예문 선택", [p.name for p in DEMO_FILES], index=0)
+    frame_height = st.sidebar.slider("카드 크기 변경", min_value=400, max_value=1200, value=760, step=20)
     show_source = st.sidebar.checkbox("Show HTML source", value=False)
+    st.sidebar.markdown(
+        '<div class="csv-footer">ChineseStrVisualizer v.0.1<br/>Copyright © MJ Park</div>',
+        unsafe_allow_html=True,
+    )
 
     selected_path = ROOT / selected_name
 
