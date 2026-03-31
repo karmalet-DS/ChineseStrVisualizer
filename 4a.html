@@ -23,7 +23,7 @@ html, body {
             fill: #F57C00 !important;
         }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@balkangraph/orgchart.js/orgchart.js"></script>
+<script src="OrgChart.js"></script>
 
 </head>
 
@@ -44,9 +44,13 @@ html, body {
                     field_1: "text"                    
                 },
                 orientation: OrgChart.orientation.top_left,
+                collapse: {
+                    level: 2
+                },
                 tags: {
                     "sentence": {
-                        template: "sentence"
+                        template: "sentence",
+                        state: OrgChart.COLLAPSE
                     },
                     "hide": {
                         state: OrgChart.COLLAPSE
@@ -61,11 +65,12 @@ html, body {
                 ]
             });
 
-            var nodeEelements = chart.getNodeElements();
+            var nodeEelements = chart.getNodeElements ? chart.getNodeElements() : chart.element.querySelectorAll("g[" + OrgChart.attr.node_id + "]");
+            if (!nodeEelements) nodeEelements = [];
             for (var i = 0; i < nodeEelements.length; i++) {
                 nodeEelements[i].addEventListener("mouseover", function () {
                     this.classList.add("highlight");
-                    var nodeId = this.getAttribute("node-id");
+                    var nodeId = this.getAttribute(OrgChart.attr.node_id);
                     var parent = chart.nodes[nodeId].parent;
                     if (parent != null) {
                         chart.getNodeElement(parent.id).classList.add("highlight");
